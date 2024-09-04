@@ -42,6 +42,16 @@ export default function TabThreeScreen() {
     setShouldRefetch(true);
   };
 
+  const removeStore = (store: types.Store) => {
+    db
+      .then((db): any => {
+        db.runAsync('DELETE FROM stores WHERE id = ?', store.id);
+      })
+      .then(() => {
+        setShouldRefetch(true);
+      });
+  };
+
   return (
     <ParallaxScrollView>
         <ThemedView style={styles.storeInputContainer}>
@@ -61,7 +71,7 @@ export default function TabThreeScreen() {
               return (
                 <Store
                   store={store}
-                  remove={() => {}}
+                  remove={() => removeStore(store)}
                   rename={(newName) => {
                     db.then((db) => {
                       const bindParams = { $name: newName, $id: store.id }
